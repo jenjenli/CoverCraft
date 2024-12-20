@@ -5,27 +5,22 @@ from main import generate_ai_letter
 
 app = Flask(__name__)
 
-# Define the path to your dataset (CSV file)
 dataset_path = 'cover_letter_data.csv'
 
-# Function to save data to CSV
 def save_to_csv(data):
     file_exists = os.path.isfile(dataset_path)
 
-    # Open the CSV file and append the new data
     with open(dataset_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
 
-        # If the file doesn't exist, write the header first
         if not file_exists:
             writer.writerow(['name', 'job_title', 'company', 'skills', 'experience'])
 
-        # Write the form data
         writer.writerow([data['name'], data['job_title'], data['company'], data['skills'], data['experience']])
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # Ensure you have this HTML file
+    return render_template('index.html') 
 
 @app.route('/generate', methods=['POST'])
 def generate():
@@ -36,7 +31,6 @@ def generate():
     skills = request.form['skills']
     experience = request.form['experience']
 
-    # Create a dictionary with the form data
     form_data = {
         'name': name,
         'job_title': job_title,
@@ -45,16 +39,52 @@ def generate():
         'experience': experience
     }
 
-    # Save to CSV
     save_to_csv(form_data)
     letter = generate_ai_letter(name, job_title, company, skills, experience)
-
-    # Return the generated letter
-    return f"<pre>{letter}</pre>"
-
-    # Optionally, you could generate the cover letter here and return it as a response
-    # For now, we just redirect to the index page
-    return redirect(url_for('index'))
+    html_response = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Generated Cover Letter</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+                color: #333;
+            }}
+            .letter {{
+                border: 1px solid #ccc;
+                padding: 20px;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+                max-width: 800px;
+                margin: 0 auto;
+            }}
+            pre {{
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }}
+            a {{
+                display: block;
+                margin-top: 20px;
+                text-align: center;
+                color: #007bff;
+                text-decoration: none;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="letter">
+            <pre>{letter}</pre>
+        </div>
+        <a href="/">Generate Another Letter</a>
+    </body>
+    </html>
+    """
+    return html_response
 
 if __name__ == '__main__':
     app.run(debug=True)

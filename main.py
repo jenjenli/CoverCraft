@@ -4,7 +4,7 @@ import json
 
 url = "https://api.arliai.com/v1/chat/completions"
 
-ARLIA_API_KEY = "e07f23a2-b301-4194-a30b-4843f5812c62"
+ARLIA_API_KEY = "13f9f761-947d-49f7-9168-0dad486ea11f"
 
 def load_data():
     try:
@@ -22,7 +22,7 @@ def generate_ai_letter(name, job_title, company, skills, experience):
     """
 
     payload = json.dumps({
-        "model": "Meta-Llama-3.1-8B-Instruct",  # Adjust model if necessary
+        "model": "Mistral-Nemo-12B-Instruct-2407",  # Adjust model if necessary
         "messages": [
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
