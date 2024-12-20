@@ -5,6 +5,8 @@ from main import generate_ai_letter
 
 app = Flask(__name__)
 
+app.config['ARLIA_API_KEY'] = os.getenv('ARLIA_API_KEY')
+
 dataset_path = 'cover_letter_data.csv'
 
 def save_to_csv(data):
