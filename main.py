@@ -25,7 +25,7 @@ def generate_ai_letter(name, job_title, company, skills, experience):
     """
 
     payload = json.dumps({
-        "model": "Mistral-Nemo-12B-Instruct-2407", 
+        "model": "Gemma-3-27B-ArliAI-RPMax-v3", 
         "messages": [
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
